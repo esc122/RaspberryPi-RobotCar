@@ -23,7 +23,7 @@ public class Tf_Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.position = new Vector3(translation_x, 0, translation_y);
+        gameObject.transform.position = new Vector3(translation_y, 0.1f, translation_x);
         gameObject.transform.rotation = new Quaternion(0, rotation_z, 0, rotation_w);
     }
 
@@ -31,11 +31,10 @@ public class Tf_Move : MonoBehaviour
     {
         frame_id = msg.transforms[0].header.frame_id;
         if (frame_id=="map"){
-            translation_x = Mathf.Floor((float)msg.transforms[1].transform.translation.x*100) / 100 ;
-            translation_y = Mathf.Floor((float)msg.transforms[1].transform.translation.y*100) / 100 ;
-            rotation_z = Mathf.Floor((float)msg.transforms[1].transform.rotation.z*100) / 100 * -1;
-            rotation_w = Mathf.Floor((float)msg.transforms[1].transform.rotation.w*100) / 100;
-            Debug.Log("Subscribe : " + translation_x + "," + translation_y + "," + rotation_z + "," + rotation_w);
+            translation_x = (float)msg.transforms[1].transform.translation.x;
+            translation_y = (float)msg.transforms[1].transform.translation.y * -1;
+            rotation_z = (float)msg.transforms[1].transform.rotation.z * -1;
+            rotation_w = (float)msg.transforms[1].transform.rotation.w;
         }
         
     }
