@@ -1,0 +1,30 @@
+<launch>
+  <!-- <param name="robot_description"
+    textfile="$(find cartographer_ros)/urdf/backpack_2d.urdf" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+    type="robot_state_publisher" /> 
+    
+    <include file="$(find ydlidar_ros)/launch/X2L.launch" /> -->
+
+  <node name="cartographer_node" pkg="cartographer_ros"
+      type="cartographer_node" args="
+          -configuration_directory $(find carto_mapper)/config
+          -configuration_basename x2.lua"
+      output="screen">
+  </node>
+
+  <node name="cartographer_occupancy_grid_node" pkg="cartographer_ros"
+      type="cartographer_occupancy_grid_node" args="-resolution 0.05"
+      output="screen" />
+  
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <rosparam file="$(find carto_mapper)/param/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+    <rosparam file="$(find carto_mapper)/param/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+    <rosparam file="$(find carto_mapper)/param/local_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find carto_mapper)/param/global_costmap_params.yaml" command="load"/>
+    <rosparam file="$(find carto_mapper)/param/base_local_planner_params.yaml" command="load" />
+  </node>
+  
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find carto_mapper)/mapconfig.rviz"/>
+</launch>
